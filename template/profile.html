@@ -1,0 +1,77 @@
+{{define "profile"}}
+<div class="container mt-3">
+    <h4 class="cursiv-text">Profil bearbeiten</h4>
+{{range .Items}}
+    <div class="row">
+        <div class="col">
+            Status: <span class="active">{{.Status}}</span>
+        </div>
+    </div>
+    <form class="form" role="form" onsubmit="return validateForm()" method="POST" enctype="multipart/form-data">
+        <div class="row mt-2">
+            <div class="col-4">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="user">Benutzername:</label>
+                            <input type="text" class="form-control" name="user" value="{{.Name}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="mail">E-Mail:</label>
+                            <input type="text" class="form-control" name="mail" value="{{.Mail}}">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="npsw">Neues Passwort:</label>
+                            <input type="password" class="form-control" name="psw">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="npsw">Neues Passwort wiederholen:</label>
+                            <input type="password" class="form-control" name="pswr">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <button type="submit" class="btn button-startpage">Änderung Speichern</button>
+                    </div>
+                    <!-- Konto Löschen Button -->
+                    <form>
+                        <div class="col">
+                            <a href="/delete/profile/{{.UserID}}">
+                                <button class="btn button-loeschen" type="button">Konto Löschen</button>
+                            </a>
+                        </div>
+                    </form>
+                </div>
+            </div>
+            <div class="offset-5 col-3 text-right">
+                <div class="d-flex flex-column">
+                    Profilbild
+                </div>
+                <div class="">
+                    <div class="d-flex flex-column">
+                        <img class="img-fluid" style="height: 200px; width: 300px" src="/static/images/{{.BildURL}}"
+                             alt="profilbild">
+                    </div>
+                </div>
+                <div class="mt-2">
+                    <input style="width: 250px" type="file" name="img">
+                </div>
+            </div>
+        </div>
+    </form>
+{{end}}
+</div>
+{{end}}

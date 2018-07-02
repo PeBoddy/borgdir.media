@@ -1,0 +1,51 @@
+{{define "header"}}
+<div class="container-fluid">
+    <div class="d-flex flex-row align-items-baseline">
+        <div class="p-2 title">
+            <a class="title" href="/index">{{split .Title 0}}</a>
+        </div>
+        <div class="p-2 menu-item">
+            <a href="/{{split .Item1 1}}">{{split .Item1 0}}</a>
+        </div>
+        {{if .Item2}}
+        <div class ="p-2 menu-item separator">
+            |
+        </div>
+        {{end}}
+        <div class="p-2 menu-item">
+            <a href="/{{split .Item2 1}}">{{split .Item2 0}}</a>
+        </div>
+        {{if .Item3}}
+            <div class ="p-2 menu-item separator">
+                |
+            </div>
+        {{end}}
+        <div class="p-2 menu-item">
+            <a href="/{{split .Item3 1}}">{{split .Item3 0}}</a>
+        </div>
+        {{if .Basket}}
+            <div class="ml-5 align-self-baseline cart-icon-small">
+                <a href="/cart"><i class="fas fa-shopping-cart"></i></a>
+            </div>
+        {{end}}
+        {{if .EmptySide}}
+        {{else}}
+            {{if .Profile}}
+                <div class="ml-auto align-self-center">
+                    <div class="mr-2 mt-3">
+                        <a href="/profile/{{.ID}}">{{.Name}}</a>
+                        <p class="text-right user">{{.Type}}</p>
+                    </div>
+                </div>
+                <div class="mr-5 ml-0 align-self-center user-icon">
+                    <a href="/profile/{{.ID}}"><i class="fas fa-user-circle"></i></a>
+                </div>
+            {{else}}
+                <div class="mr-5 ml-auto align-self-center cart-icon">
+                    <a href="/cart"><i class="fas fa-shopping-cart"></i></a>
+                </div>
+            {{end}}
+        {{end}}
+    </div>
+</div>
+{{end}}

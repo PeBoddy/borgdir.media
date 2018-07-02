@@ -1,0 +1,32 @@
+{{define "login"}}
+<div class="container mid-content">
+    <div class="row text-center">
+        <div class="col big-bold-text">
+            Login
+        </div>
+    </div>
+    <form class="form" role="form" onsubmit="return validateForm()" method="POST">
+        <div class="row justify-content-center mt-2">
+            <div class="col-4">
+                <div class="form-group text-left">
+                    <label for="user">Benutzername:</label>
+                    <input type="text" class="form-control" name="user" autofocus>
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-4">
+                <div class="form-group text-left">
+                    <label for="psw">Passwort:</label>
+                    <input type="password" class="form-control" name="psw">
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-2">
+            <div class="col-2">
+                <button type="submit" class="btn btn-block button-startpage">Anmelden</button>
+            </div>
+        </div>
+    </form>
+</div>
+{{end}}

@@ -1,0 +1,30 @@
+{{define "admin"}}
+<!-- CONTENT -->
+<div class="container mid-content">
+    <div class="row">
+        <div class="col text-center">
+            <h2>Administrationsbereich</h2>
+        </div>
+    </div>
+    <div class="row mt-5 mb-2">
+        <div class="offset-1 col-5 text-center">
+            <i class="fas fa-clipboard-list admin-icon"></i>
+        </div>
+        <div class="col-5 text-center">
+            <i class="fas fa-users admin-icon"></i>
+        </div>
+    </div>
+    <div class="row">
+        <div class="offset-1 col-5 text-center">
+            <a href="/admin/equipment">
+                <button class="btn button-startpage">Equipment-Verwalten</button>
+            </a>
+        </div>
+        <div class="col-5 text-center">
+            <a href="/admin/clients">
+                <button class="btn button-startpage ml-5">Kunden-Verwalten</button>
+            </a>
+        </div>
+    </div>
+</div>
+{{end}}

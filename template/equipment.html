@@ -1,0 +1,70 @@
+{{define "equipment"}}
+<div class="container mt-3">
+    <h4>Equipment</h4>
+    <div class="row">
+        <div class="col-md-1 ml-auto">
+            <p class="minimal-margin">Kategorie</p>
+        </div>
+        <div class="col-md-2 text-lg-right">
+            <p class="minimal-margin">Sortieren nach:</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col offset-md-6">
+            <div class="row">
+                <input class="form-control col-7 mr-2" id="input1" type="text" placeholder="Suche">
+                <select class="form-control selectBox col">
+                    <option>Alle</option>
+                {{range .Kategorien}}
+                    <option>{{.}}</option>
+                {{end}}
+                </select>
+            </div>
+        </div>
+        <div class="col-md-2">
+            <select class="form-control">
+                <option></option>
+            {{range .Kategorien}}
+                <option>{{.}}</option>
+            {{end}}
+            </select>
+        </div>
+
+    </div>
+    <div class="row mt-5">
+    {{range .Items}}
+        <div class="col-md-6 mb-5">
+            <div class="row">
+                <div class="col-md-9">
+                    <div class="row">
+                        <h5 class="">{{.Bezeichnung}}</h5>
+                    </div>
+                    <div class="row text-spalte">
+                        <p>{{.Hinweis}}</p>
+                    </div>
+                    <div class="row">
+                    {{if eq .Anzahl 0}}
+                        <div class="col text-lg-right red-text">
+                            <p>entliehen</p>
+                        </div>
+                    {{else}}
+                        <div class="ml-0">
+                            <a href="/add-to-cart/{{.ItemID}}">
+                                <button type="button" class="btn btn-sm button-startpage">In Warenkorb legen</button>
+                            </a>
+                        </div>
+                        <div class="ml-auto">
+                            <p>{{.Anzahl}} verfügbar</p>
+                        </div>
+                    {{end}}
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <img class="img-fluid" style="width: 150px; height: 100px" src="/static/images/{{.BildURL}}">
+                </div>
+            </div>
+        </div>
+    {{end}}
+    </div>
+</div>
+{{end}}

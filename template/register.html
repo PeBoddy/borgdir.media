@@ -1,0 +1,52 @@
+{{define "register"}}
+<script>
+    $(document).ready(function () {
+        document.getElementById('btnRegister').disabled = true;
+    });
+</script>
+<div class="container mid-content">
+    <div class="row text-center">
+        <div class="col big-bold-text">
+            Noch kein Kunde bei uns ?
+        </div>
+    </div>
+    <form class="form" role="form" onsubmit="return validateForm()" method="POST">
+        <div class="row justify-content-center mt-5">
+            <div class="col-4">
+                <div class="form-group text-left">
+                    <label for="user">Benutzername:</label>
+                    <input type="text" class="form-control" name="user" id="user" autofocus onkeyup="check();">
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group text-left">
+                    <label for="mail">E-Mail:</label>
+                    <input type="text" class="form-control" name="mail" id="mail" onkeyup="check();">
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center">
+            <div class="col-4">
+                <div class="form-group text-left">
+                    <label for="psw">Passwort:</label>
+                    <input type="password" class="form-control" name="psw" id="psw" onkeyup="check();">
+                </div>
+            </div>
+            <div class="col-4">
+                <div class="form-group text-left">
+                    <label for="psw">Passwort wiederholen:
+                        <span class="ml-5" id="message">
+                        </span>
+                    </label>
+                    <input type="password" class="form-control" name="pswr" id="pswr" onkeyup="check();">
+                </div>
+            </div>
+        </div>
+        <div class="row justify-content-center mt-2">
+            <div class="col-2 text-center">
+                <button class="btn  btn-block button-startpage" id="btnRegister">Registrieren</button>
+            </div>
+        </div>
+    </form>
+</div>
+{{end}}

@@ -1,0 +1,203 @@
+.bottom-border {
+    border-bottom: black solid 1px;
+}
+
+img {
+    max-width: 80%;
+}
+
+.text-spalte {
+    word-break: break-all;
+    display: inline-block
+}
+
+.text-zeile
+{
+    word-break: keep-all;
+    display: flow;
+}
+
+i {
+    width: 1em;
+    height: 1em;
+    display: block;
+    cursor: pointer;
+}
+
+.red-text {
+    color: #ff6246;
+}
+
+.red-background {
+    background-color: #ff6246;
+}
+
+.small-text {
+    font-size: small;
+}
+
+.cursiv-text {
+    font-style: italic;
+}
+
+.semi-bold-text {
+    font-weight: lighter;
+}
+
+.bold-text {
+    font-weight: bold;
+}
+
+.bold-medium-text {
+    font-weight: bolder;
+    font-size: medium;
+}
+
+.trash-button {
+    border-radius: 20px;
+    padding: 0px;
+    height: 50%;
+    width: 40%;
+}
+
+.ausleihen-button {
+    border-radius: 80px;
+    width: 70%;
+    margin-left: 15%;
+    color: white;
+    font-weight: bold;
+    border-bottom-style: solid;
+    border-width: 1pt;
+    border-color: #0b2e13;
+}
+
+.centered-text {
+    text-align: center;
+}
+
+.select-dropdown {
+    width: 40%;
+    margin-left: 40%;
+}
+
+.equipment-image {
+    border-style: solid;
+    border-width: 1pt;
+    margin: 3%;
+    padding: 3%;
+}
+
+.vertical-label-center {
+    padding-top: 10%;
+}
+
+.equipment-label p {
+    padding-top: 5%;
+}
+
+/*
+button.red-background {
+    width: 30%;
+    height: 25%;
+}
+
+*/
+
+.entferne-button {
+    border-radius: 70px;
+    width: 80%;
+    margin-left: 10%;
+    height: 30%;
+    border-bottom-style: solid;
+    border-width: 1pt;
+    border-color: #0b2e13;
+}
+
+.fa-button {
+    border-radius: 80px;
+    width: 70%;
+    margin-left: 15%;
+    color: white;
+    font-weight: bold;
+    border-bottom-style: solid;
+    border-width: 1pt;
+    border-color: #0b2e13;
+}
+
+.add-button {
+    border-radius: 70px;
+    width: 100%;
+    color: white;
+    font-weight: bold;
+    border-bottom-style: solid;
+    border-width: 1pt;
+    border-color: #0b2e13;
+    background-color: #ff6246;
+}
+
+div.search-bar {
+    border-radius: 50px;
+    border-style: solid;
+    border-width: 1pt;
+    border-color: #0b2e13;
+    background: black;
+}
+
+input.search-bar {
+    border-radius: 70px;
+    width: 70%;
+    border-style: solid;
+    border-width: 1pt;
+    border-color: #0b2e13;
+    background: white;
+    outline: none;
+    padding-left: 3%;
+}
+
+select.search-bar {
+    color: white;
+    border-radius: 70px;
+    width: 30%;
+    border-style: solid;
+    border-width: 1pt;
+    border-color: #0b2e13;
+    background: black;
+    outline: none;
+}
+
+search-bar:focus {
+    outline: none;
+    background: black;
+}
+
+option {
+    color: white;
+    border-radius: 70px;
+    width: 30%;
+    border-style: solid;
+    border-width: 1pt;
+    border-color: #0b2e13;
+    background: black;
+}
+select.form-control.search-bar {
+    color: white;
+    outline: none;
+    background: black;
+}
+
+.form-control:focus {
+    border-color: black;
+    box-shadow: 0 0 0 0.2rem rgba(0, 0, 0, 0);
+}
+
+.selectBox {
+    border-radius: 4px;
+    border: 1px solid #AAAAAA;
+}
+
+.warenkorb-hinzufuegen {
+    border-radius: 70px;
+    border-bottom-style: solid;
+    border-width: 1pt;
+    border-color: #0b2e13;
+}

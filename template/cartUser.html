@@ -1,0 +1,63 @@
+{{define "cartUser"}}
+<div class="container mt-3">
+    <div class="row mb-3">
+        <h4>Warenkorb</h4>
+    </div>
+    <div class="row bottom-border cursiv-text bold-text mb-3">
+        <div class="col-3">
+            Equipment
+        </div>
+        <div class="col-3">
+            Beschreibung
+        </div>
+        <div class="col-2 centered-text">
+            Anzahl
+        </div>
+        <div class="col-2">
+            <p class="centered-text">Rückgabe bis</p>
+        </div>
+        <div class="col-2">
+            <p class="centered-text">Löschen</p>
+        </div>
+    </div>
+{{range .Items}}
+    <div class="row equipment-row mb-2">
+        <div class="col-3">
+            <div class="row">
+                <div class="col-md-4">
+                    <img class="img-fluid" style="width: 150px; height: 80px" src="/static/images/{{.BildURL}}">
+                </div>
+                <div class="col-md-6">
+                    <div class="row equipment-label">
+                        <p class="bold-medium-text minimal-margin equipment-label">{{.Bez}}</p>
+                    </div>
+                    <div class="row">
+                        <p class="small-text cursiv-text">Inv.Nr.: {{.InvNum}}</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-3 text-spalte">
+            <p>{{.Hinweis}}</p>
+        </div>
+        <div class="col-1 ml-5">
+            <input type="text" class="form-control text-center" name="anz" id="anz" value="{{.Anz}}">
+        </div>
+        <div class="col-2 ml-5">
+            <p class="centered-text">Rückgabe:</p>
+            <p class="red-text cursiv-text centered-text">{{.Rueckgabe}}</p>
+        </div>
+        <div class="col-1 ml-5">
+            <a href="/remove-from-cart/{{.ItemID}}" class="btn bg-dark fa-button">
+                <i class="fas fa-trash text-white"></i>
+            </a>
+        </div>
+    </div>
+{{end}}
+    <form class="form" role="form" onsubmit="return validateForm()" method="POST">
+        <div class="col text-right mb-3">
+            <button type="submit" class="btn button-startpage">Jetzt ausleihen</button>
+        </div>
+    </form>
+</div>
+{{end}}
