@@ -1,10 +1,7 @@
 {{define "myequipment"}}
 <div class="container mt-5">
-
     <h4 class="">Meine Geräte</h4>
-
     <br>
-
     <div class="row bottom-border cursiv-text bold-text">
         <div class="col-3">
             Equipment
@@ -22,18 +19,18 @@
             <p class="centered-text">Verlängern</p>
         </div>
     </div>
-
     <br>
 {{range .Items}}
+{{if eq .Noticed 0}}
     <div class="row equipment-row mb-3">
         <div class="col-3">
             <div class="row">
                 <div class="col-4">
-                    <img class="img-fluid" style ="width: 160px; height: 80px" src="static/images/{{.BildURL}}">
+                    <img class="img-fluid" style="width: 160px; height: 80px" src="static/images/{{.BildURL}}">
                 </div>
                 <div class="col-6">
                     <div class="row equipment-label">
-                        <p class="bold-medium-text minimal-margin equipment-label">{{.Bezeichnung}}</p>
+                        <p class="bold-text equipment-label">{{.Bezeichnung}}</p>
                     </div>
                     <div class="row">
                         <p class="small-text cursiv-text">Inv.Nr. {{.InventarNummer}}</p>
@@ -57,55 +54,54 @@
         </div>
     </div>
 {{end}}
-    <!--
-        <h4 class="cursiv-text">Vorgemerkt</h4>
-
-        <br>
-
-        <div class="row bottom-border cursiv-text bold-text">
-            <div class="col-3">
-                Equipment
-            </div>
-            <div class="col-3">
-                Beschreibung
-            </div>
-            <div class="col-4 centered-text">
-                Rückgabe vsl.
-            </div>
-            <div class="col-2 offset-0">
-                <p class="centered-text">Entfernen</p>
-            </div>
+{{end}}
+    <h4 class="mt-5 cursiv-text">Vorgemerkt</h4>
+    <div class="row bottom-border cursiv-text bold-text">
+        <div class="col-3">
+            Equipment
         </div>
-
-        <br>
-        <div class="row equipment-row">
-            <div class="col-3">
-                <div class="row">
-                    <div class="col-4">
-                        <img class="img-fluid" style ="width: 160px; height: 80px" src="/static/images/{{.BildURL}}">
+        <div class="col-3">
+            Beschreibung
+        </div>
+        <div class="col-4 centered-text">
+            Rückgabe vsl.
+        </div>
+        <div class="col-2 offset-0">
+            <p class="centered-text">Entfernen</p>
+        </div>
+    </div>
+{{range .Items}}
+{{if eq .Noticed 1}}
+    <div class="mt-2 row equipment-row">
+        <div class="col-3">
+            <div class="row">
+                <div class="col-4">
+                    <img class="img-fluid" style="width: 160px; height: 80px" src="/static/images/{{.BildURL}}">
+                </div>
+                <div class="col-6">
+                    <div class="row equipment-label">
+                        <p class="bold-medium-text minimal-margin equipment-label">{{.Bezeichnung}}</p>
                     </div>
-                    <div class="col-6">
-                        <div class="row equipment-label">
-                            <p class="bold-medium-text minimal-margin equipment-label">{{.Bezeichnung}}</p>
-                        </div>
-                        <div class="row">
-                            <p class="small-text cursiv-text">Inv.Nr.: {{.InventarNummer}}</p>
-                        </div>
+                    <div class="row">
+                        <p class="small-text cursiv-text">Inv.Nr.: {{.InventarNummer}}</p>
                     </div>
                 </div>
             </div>
-            <div class="col-3 text-spalte">
-                <p>{{.Hinweis}}</p>
-            </div>
-
-            <div class="col-4">
-                <p class="minimal-margin red-text cursiv-text centered-text">{{.Rueckgabe}}</p>
-            </div>
-            <div class="col-2 offset-0">
-                <button type="button" class="btn btn-default red-background border border-dark entferne-button"></button>
-            </div>
         </div>
-        -->
+        <div class="col-3 text-spalte">
+            <p>{{.Hinweis}}</p>
+        </div>
 
+        <div class="col-4">
+            <p class="red-text cursiv-text centered-text">17.03.2018</p>
+        </div>
+        <div class="col-2 offset-0">
+            <a href="/notice/off/{{.ItemID}}">
+                <button type="button" class="btn btn-block button-startpage">Entfernen</button>
+            </a>
+        </div>
+    </div>
+{{end}}
+{{end}}
 </div>
 {{end}}

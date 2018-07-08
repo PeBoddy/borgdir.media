@@ -134,3 +134,8 @@ a.title:link {
     top: 0;
     left: 4px;
 }
+
+.found {
+    background: yellow;
+    font-size: 50px;
+}

@@ -2,44 +2,51 @@
 <div class="container mt-3">
     <h4>Equipment</h4>
     <div class="row">
-        <div class="col-md-1 ml-auto">
+        <div class="col-1 ml-auto">
             <p class="minimal-margin">Kategorie</p>
         </div>
-        <div class="col-md-2 text-lg-right">
+        <div class="col-2 text-lg-right">
             <p class="minimal-margin">Sortieren nach:</p>
         </div>
     </div>
     <div class="row">
-        <div class="col offset-md-6">
+        <div class="col offset-6">
             <div class="row">
-                <input class="form-control col-7 mr-2" id="input1" type="text" placeholder="Suche">
-                <select class="form-control selectBox col">
+                <form class="col-8 " id="search-form" action="javascript: search();">
+                    <input class="form-control" type="text" placeholder="Suche" id="search-val" onabort="document.getElementById('search-form').submit(); return false;">
+                </form>
+                <select class="form-control col">
                     <option>Alle</option>
-                {{range .Kategorien}}
-                    <option>{{.}}</option>
-                {{end}}
+                    <option>Kamera</option>
+                    <option>Kommunikation</option>
+                    <option>Computer Zubehör</option>
+                    <option>Kabel</option>
+                    <option>Audiosysteme</option>
                 </select>
             </div>
         </div>
-        <div class="col-md-2">
+        <div class="col-2">
             <select class="form-control">
                 <option></option>
-            {{range .Kategorien}}
-                <option>{{.}}</option>
-            {{end}}
+                <option>Alle</option>
+                <option>Kamera</option>
+                <option>Kommunikation</option>
+                <option>Computer Zubehör</option>
+                <option>Kabel</option>
+                <option>Audiosysteme</option>
             </select>
         </div>
 
     </div>
     <div class="row mt-5">
     {{range .Items}}
-        <div class="col-md-6 mb-5">
+        <div class="col-6 mb-5">
             <div class="row">
-                <div class="col-md-9">
-                    <div class="row">
-                        <h5 class="">{{.Bezeichnung}}</h5>
+                <div class="col-9" id="{{.Bezeichnung}}">
+                    <div class="row search-item">
+                        <p class="bold-text" id="test">{{.Bezeichnung}}</p>
                     </div>
-                    <div class="row text-spalte">
+                    <div class="row text-spalte search-item">
                         <p>{{.Hinweis}}</p>
                     </div>
                     <div class="row">
@@ -53,13 +60,18 @@
                                 <button type="button" class="btn btn-sm button-startpage">In Warenkorb legen</button>
                             </a>
                         </div>
+                        <div class="ml-1">
+                            <a href="/notice/{{.ItemID}}">
+                                <button type="button" class="btn btn-sm button-startpage">Vormerken</button>
+                            </a>
+                        </div>
                         <div class="ml-auto">
                             <p>{{.Anzahl}} verfügbar</p>
                         </div>
                     {{end}}
                     </div>
                 </div>
-                <div class="col-md-3">
+                <div class="col-3">
                     <img class="img-fluid" style="width: 150px; height: 100px" src="/static/images/{{.BildURL}}">
                 </div>
             </div>

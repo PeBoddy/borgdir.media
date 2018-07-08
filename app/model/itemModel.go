@@ -5,35 +5,26 @@ import (
 	"fmt"
 )
 
-// Items data structure
-type Items struct {
-	ItemID         int
-	Bezeichnung    string
-	Kategorie      string
-	InventarNummer int
-	Lagerort       string
-	Anzahl         int
-	Inhalt         string
-	Hinweis        string
-	BildURL        string
-}
+func CreateItem(bez string, kat string, invNum int, lgo string, anz int, in string, hin string, url string) {
 
-func CreateItem(bez string, kat string, invNum int, lgo string, anz int, in string, hin string) {
-
-	statement := "insert into Items (Bezeichnung, Kategorie, InventarNummer, Lagerort, Anzahl, Inhalt, Hinweis, BildURL, Status, AusgeliehenAm, RueckgabeAm, Entliehen) values (?,?,?,?,?,?,?,?,?,?,?,?)"
+	statement := "insert into Items (Bezeichnung, Kategorie, InventarNummer, Lagerort, Anzahl, Inhalt, Hinweis, BildURL, Status, AusgeliehenAm, RueckgabeAm, Entliehen, Noticed) values (?,?,?,?,?,?,?,?,?,?,?,?,?)"
 	stmt, err := config.Db.Prepare(statement)
 
 	if err != nil {
 		return
 	}
-
 	defer stmt.Close()
-	_, err = stmt.Exec(bez, kat, invNum, lgo, anz, in, hin, "item_placeholder.png", "Verfügbar", "-", "-", 0)
+
+	if url == "" {
+		_, err = stmt.Exec(bez, kat, invNum, lgo, anz, in, hin, "item_placeholder.png", "Verfügbar", "-", "-", 0,0)
+	} else {
+		_, err = stmt.Exec(bez, kat, invNum, lgo, anz, in, hin, url, "Verfügbar", "-", "-", 0,0)
+	}
 
 	return
 }
 
-// Update the Items-Bezeichnung by id
+// Update Item
 func UpdateItem(id int, bez string, kat string, invNum int, lago string, in string, anz int, hin string, url string) (err error) {
 	_, err = config.Db.Exec("update Items set Bezeichnung = $1 where ItemID = $2", bez, id)
 	_, err = config.Db.Exec("update Items set Kategorie = $1 where ItemID = $2", kat, id)
@@ -42,7 +33,10 @@ func UpdateItem(id int, bez string, kat string, invNum int, lago string, in stri
 	_, err = config.Db.Exec("update Items set Inhalt = $1 where ItemID = $2", in, id)
 	_, err = config.Db.Exec("update Items set Anzahl = $1 where ItemID = $2", anz, id)
 	_, err = config.Db.Exec("update Items set Hinweis = $1 where ItemID = $2", hin, id)
-	_, err = config.Db.Exec("update Items set BildURL = $1 where ItemID = $2", url, id)
+
+	if url != "" {
+		_, err = config.Db.Exec("update Items set BildURL = $1 where ItemID = $2", url, id)
+	}
 	return
 }
 
@@ -100,15 +94,42 @@ func GetAllBezeichnungenFromKundenArtikel(kunde_id int) (Bezeichnungen []string)
 }
 
 func GetUserEquipment(kunde_id int) (equipments []MyItem) {
-	rows, err := config.Db.Query("select Items.ItemID, Items.BildURL, Items.Bezeichnung, Items.InventarNummer, Items.Hinweis, Items.AusgeliehenAm, Items.RueckgabeAm from Items,Lend WHERE Items.ItemID = Lend.ItemID AND Lend.UserID=$1", kunde_id)
+	rows, err := config.Db.Query("select Items.ItemID, Items.BildURL, Items.Bezeichnung, Items.InventarNummer, Items.Hinweis, Items.AusgeliehenAm, Items.RueckgabeAm, Items.Noticed from Items,Lend WHERE (Items.ItemID = Lend.ItemID AND Lend.UserID=$1) OR Items.Noticed = 1", kunde_id)
 
 	if err != nil {
+		fmt.Println(err)
 		return
 	}
+
 	for rows.Next() {
 		equipment := MyItem{}
 
 		err = rows.Scan(&equipment.ItemID, &equipment.BildURL, &equipment.Bezeichnung, &equipment.InventarNummer, &equipment.Hinweis, &equipment.Beginn, &equipment.Rueckgabe)
+
+		if err != nil {
+			return
+		}
+
+		equipments = append(equipments, equipment)
+	}
+	rows.Close()
+	defer config.Db.Close()
+	config.InitSQLiteDB()
+
+	return
+}
+
+func GetNoticedEquipment() (equipments []MyItem) {
+	rows, err := config.Db.Query("select ItemID, BildURL, Bezeichnung, InventarNummer, Hinweis, AusgeliehenAm, RueckgabeAm, Noticed from Items WHERE Noticed = 1")
+
+	if err != nil {
+		return
+	}
+
+	for rows.Next() {
+		equipment := MyItem{}
+
+		err = rows.Scan(&equipment.ItemID, &equipment.BildURL, &equipment.Bezeichnung, &equipment.InventarNummer, &equipment.Hinweis, &equipment.Beginn, &equipment.Rueckgabe, &equipment.Noticed)
 
 		if err != nil {
 			return
@@ -183,3 +204,20 @@ func GetCartItems(id int) (cartItems []Cart) {
 	rows.Close()
 	return
 }
+
+func UpdateNoticed(id int)(err error) {
+	_, err = config.Db.Exec("update Items set Noticed = 1 where ItemID = $1", id)
+	fmt.Println(err)
+	defer config.Db.Close()
+	config.InitSQLiteDB()
+	return
+}
+
+func UpdateNoticedOff(id int)(err error) {
+	_, err = config.Db.Exec("update Items set Noticed = 0 where ItemID = $1", id)
+	defer config.Db.Close()
+	config.InitSQLiteDB()
+	fmt.Println(err)
+	return
+}
+

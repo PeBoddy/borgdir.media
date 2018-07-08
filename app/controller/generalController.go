@@ -128,22 +128,27 @@ func Login(w http.ResponseWriter, r *http.Request) {
 		passwordDB, _ := base64.StdEncoding.DecodeString(user.Password)
 		err := bcrypt.CompareHashAndPassword(passwordDB, []byte(password))
 
-		if err == nil {
-			// Set user as authenticated
-			session.Values["authenticated"] = true
-			session.Values["username"] = username
-			session.Values["id"] = user.ID
-			session.Values["typ"] = user.Typ
-			session.Save(r, w)
-
-			if (model.GetKundenTyp(session.Values["id"].(int))[0].Typ == "Benutzer") {
-				http.Redirect(w, r, "/index", 301)
-			} else {
-				http.Redirect(w, r, "/admin", 301)
-			}
-		} else {
+		if user.Status == "gesperrt" {
 			http.Redirect(w, r, "/login", 301)
+		} else {
+			if err == nil {
+				// Set user as authenticated
+				session.Values["authenticated"] = true
+				session.Values["username"] = username
+				session.Values["id"] = user.ID
+				session.Values["typ"] = user.Typ
+				session.Save(r, w)
+
+				if (model.GetKundenTyp(session.Values["id"].(int))[0].Typ == "Benutzer") {
+					http.Redirect(w, r, "/index", 301)
+				} else {
+					http.Redirect(w, r, "/admin", 301)
+				}
+			} else {
+				http.Redirect(w, r, "/login", 301)
+			}
 		}
+
 	} else {
 		//Header Variablen setzen
 		p := menu{
@@ -174,9 +179,29 @@ func Logout(w http.ResponseWriter, r *http.Request) {
 	session.Values["username"] = ""
 	session.Values["id"] = 0
 	session.Values["typ"] = ""
+	session.Values["save"] = false
+	session.Values["cartLength"] = nil
+	session.Values["cart"] = cartItems{}
 	session.Save(r, w)
 
-	http.Redirect(w, r, "/index", 301)
+	p := menu{
+		Title:     "borgdir.media, index",
+		Item1:     "Equipment,equipment",
+		Item2:     "Login,login",
+		Item3:     "",
+		Basket:    false,
+		Name:      "",
+		Type:      "",
+		ID:        0,
+		EmptySide: false,
+		Profile:   false}
+
+	var tmpl = template.Must(template.New("main").Funcs(funcMap).ParseFiles("template/header.html", "template/layout.html", "template/index.html"))
+
+	tmpl.ExecuteTemplate(w, "main", p)
+	tmpl.ExecuteTemplate(w, "layout", p)
+	tmpl.ExecuteTemplate(w, "header", p)
+	tmpl.ExecuteTemplate(w, "index", p)
 }
 
 func Register(w http.ResponseWriter, r *http.Request) {
@@ -248,7 +273,7 @@ func Cart(w http.ResponseWriter, r *http.Request) {
 					today := timeToday.String()
 					today = timeToday.Format("02.01.2006")
 
-					timeToday = timeToday.AddDate(0,0,14)
+					timeToday = timeToday.AddDate(0, 0, 14)
 					rueckgabe := timeToday.Format("02.01.2006")
 
 					model.LendItems(itemID, username, userID, today, rueckgabe, anz)
@@ -258,8 +283,7 @@ func Cart(w http.ResponseWriter, r *http.Request) {
 			session.Values["save"] = false
 			session.Values["cartLength"] = nil
 			session.Values["cart"] = cartItems{}
-
-			session.Save(r,w)
+			session.Save(r, w)
 		}
 		p := menu{
 			Title:     "borgdir.media,index",

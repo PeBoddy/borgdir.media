@@ -6,6 +6,7 @@ type SessionData struct {
 	Username string
 	Typ      string
 	Password string
+	Status   string
 }
 
 // User data structure
@@ -20,6 +21,9 @@ type User struct {
 // Typ
 type Typ struct {
 	Typ string
+}
+type Status struct {
+	Status string
 }
 
 //Date
@@ -46,6 +50,7 @@ type MyItem struct {
 	Hinweis        string
 	Beginn         string
 	Rueckgabe      string
+	Noticed        int
 }
 
 // /admin/equipment Seiten Struct
@@ -89,4 +94,24 @@ type Profile struct {
 	BildURL string
 	Mail    string
 	Status  string
+}
+
+// Items data structure
+type Items struct {
+	ItemID         int
+	Bezeichnung    string
+	Kategorie      string
+	InventarNummer int
+	Lagerort       string
+	Anzahl         int
+	Inhalt         string
+	Hinweis        string
+	BildURL        string
+}
+
+// Lender data structure
+type Lend struct {
+	LendID    int
+	KundenID  int
+	ArtikelID int
 }

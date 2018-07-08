@@ -15,7 +15,6 @@ type MyEquipment struct {
 }
 
 type Equipment struct {
-	Kategorien []string
 	Items      []model.Equipment
 }
 
@@ -46,7 +45,7 @@ func EquipmentPage(w http.ResponseWriter, r *http.Request) {
 		tmpl.ExecuteTemplate(w, "main", p)
 		tmpl.ExecuteTemplate(w, "layout", p)
 		tmpl.ExecuteTemplate(w, "header", p)
-		tmpl.ExecuteTemplate(w, "equipment", Equipment{Kategorien: []string{"Kameras", "Mikrofone", "Monitore", "Beleuchtung"}, Items: EquipmentArr})
+		tmpl.ExecuteTemplate(w, "equipment", Equipment{Items: EquipmentArr})
 	} else {
 		p := menu{
 			Title:     "borgdir.media,index",
@@ -67,7 +66,7 @@ func EquipmentPage(w http.ResponseWriter, r *http.Request) {
 		tmpl.ExecuteTemplate(w, "main", p)
 		tmpl.ExecuteTemplate(w, "layout", p)
 		tmpl.ExecuteTemplate(w, "header", p)
-		tmpl.ExecuteTemplate(w, "equipment", Equipment{Kategorien: []string{"Kameras", "Mikrofone", "Monitore", "Beleuchtung"}, Items: EquipmentArr})
+		tmpl.ExecuteTemplate(w, "equipment", Equipment{Items: EquipmentArr})
 	}
 }
 
@@ -90,6 +89,10 @@ func Myequipment(w http.ResponseWriter, r *http.Request) {
 			Profile:   true}
 
 		ArtikelArr := model.GetUserEquipment(session.Values["id"].(int))
+
+		if len(ArtikelArr) == 0 {
+			ArtikelArr = model.GetNoticedEquipment()
+		}
 
 		tmpl := template.Must(template.New("main").Funcs(funcMap).ParseFiles("template/myequipment.html", "template/header.html", "template/layout.html"))
 
@@ -217,19 +220,36 @@ func DeleteProfile(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func LockProfile(w http.ResponseWriter, r *http.Request) {
+func NoticeItem (w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session")
 
 	if auth, ok := session.Values["authenticated"].(bool); !auth || !ok {
 		http.Redirect(w, r, "/login", 301)
 	} else {
-		i := r.URL.Path[len("/lock/profile/"):]
+		i := r.URL.Path[len("/notice/"):]
 
 		id, err := strconv.Atoi(i)
 		if err != nil {
 			return
 		}
-		model.LockProfile(id)
-		http.Redirect(w, r, "/lock/profile"+i, 301)
+		model.UpdateNoticed(id)
+		http.Redirect(w, r, "/equipment", 301)
+	}
+}
+
+func NoticeOff (w http.ResponseWriter, r *http.Request) {
+	session, _ := store.Get(r, "session")
+
+	if auth, ok := session.Values["authenticated"].(bool); !auth || !ok {
+		http.Redirect(w, r, "/login", 301)
+	} else {
+		i := r.URL.Path[len("/notice/off/"):]
+
+		id, err := strconv.Atoi(i)
+		if err != nil {
+			return
+		}
+		model.UpdateNoticedOff(id)
+		http.Redirect(w, r, "/myequipment", 301)
 	}
 }

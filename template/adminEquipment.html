@@ -1,82 +1,86 @@
 {{define "adminEquipment"}}
 <div class="container my-3">
-    <h4 class="minimal-margin">Equipment verwalten</h4>
+    <h4 class="">Equipment verwalten</h4>
     <div class="row search-row">
-        <div class="col1 offset-md-5">
+        <div class="col1 offset-5">
             <p class="ml-3">Kategorie</p>
         </div>
     </div>
     <div class="row search-row">
-        <div class="col-md-1">
+        <div class="col-1">
             <a href="/admin/add">
                 <button class="btn btn-block button-startpage">+</button>
             </a>
         </div>
         <div class="col ml-5">
             <div class="row">
-                <input class="form-control col-3 mr-2" id="input1" type="text" placeholder="Suche">
+                <form class="col-3" id="search-form" action="javascript: search();">
+                    <input class="form-control" id="search-val" type="text" placeholder="Suche" onabort="document.getElementById('search-form').submit(); return false;">
+                </form>
                 <select class="form-control selectBox col-2">
                     <option>Alle</option>
-                    <option>1</option>
-                    <option>2</option>
-                    <option>3</option>
+                    <option>Kamera</option>
+                    <option>Kommunikation</option>
+                    <option>Computer Zubehör</option>
+                    <option>Kabel</option>
+                    <option>Audiosysteme</option>
                 </select>
             </div>
         </div>
     </div>
     <div class="row bottom-border my-4 cursiv-text bold-text">
-        <div class="col-md-3">
+        <div class="col-3">
             Equipment
         </div>
-        <div class="col-md-3">
+        <div class="col-3">
             Beschreibung
         </div>
-        <div class="col-md-2">
+        <div class="col-2">
             Status
         </div>
     </div>
 {{range .Items}}
-    <div class="row equipment-row">
-        <div class="col-md-3">
-            <div class="row">
+    <div class="row equipment-row" id="items">
+        <div class="col-3">
+            <div class="row" id="item">
                 <div class="col">
                     <img class="img-fluid" style="height: 80px; width: 150px" src="/static/images/{{.BildURL}}">
                 </div>
-                <div class="col ml-0">
-                    <h5>{{.Bezeichnung}}</h5>
+                <div class="col ml-0 search-item">
+                    <p class="bold-text">{{.Bezeichnung}}</p>
                     <p class="small-text cursiv-text">Inv.Nr.: {{.InventarNummer}}</p>
                     <p class="small-text cursiv-text">Lagerort: <span class="red-text">{{.Lagerort}}</span></p>
                 </div>
             </div>
         </div>
-        <div class="col-md-3 text-spalte">
+        <div class="col-3 text-spalte search-item">
             <p>{{.Hinweis}}</p>
         </div>
     {{if eq .Entliehen 0}}
-        <div class="col-md-2">
-            <p class="minimal-margin bold-medium-text cursiv-text">{{.Status}}</p>
+        <div class="col-2">
+            <p class="bold-medium-text cursiv-text">{{.Status}}</p>
         </div>
     {{else}}
-        <div class="col-md-2">
-            <p class="minimal-margin ">Entliehen an:</p>
-            <p class="minimal-margin bold-medium-text cursiv-text">{{.Status}}</p>
+        <div class="col-2">
+            <p>Entliehen an:</p>
+            <p class="bold-medium-text cursiv-text">{{.Status}}</p>
         </div>
     {{end}}
     {{if eq .Entliehen 1}}
-        <div class="col-md-2">
-            <p class="minimal-margin centered-text">Rückgabe:</p>
-            <p class="minimal-margin red-text cursiv-text centered-text">{{.Rueckgabe}}</p>
+        <div class="col-2">
+            <p class="centered-text">Rückgabe:</p>
+            <p class="red-text cursiv-text centered-text">{{.Rueckgabe}}</p>
         </div>
     {{else}}
-    <div class="col-md-2">
+    <div class="col-2">
     </div>
     {{end}}
-        <div class="col-md-1 centered-text">
+        <div class="col-1 centered-text">
             <a href="/admin/change/item/{{.ItemID}}" class="btn btn-default bg-dark fa-button">
                 <i class="fas fa-pencil-alt text-white"></i>
             </a>
         </div>
-        <div class="col-md-1 centered-text">
+        <div class="col-1 centered-text">
             <a href="/admin/delete/item/{{.ItemID}}" class="btn btn-default bg-dark fa-button">
                 <i class="fas fa-trash text-white"></i>
             </a>

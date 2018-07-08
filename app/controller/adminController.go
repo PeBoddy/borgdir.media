@@ -7,6 +7,7 @@ import (
 	"strconv"
 	"os"
 	"io"
+	"fmt"
 )
 
 // /admin/clients Seiten Struct
@@ -33,8 +34,6 @@ type ChangeItems struct {
 	Item []model.ChangeItem
 }
 
-
-
 func Admin(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "session")
 
@@ -44,7 +43,7 @@ func Admin(w http.ResponseWriter, r *http.Request) {
 		if session.Values["typ"].(string) == "Verleiher" {
 			p := menu{
 				Title:     "borgdir.media,index",
-				Item1:     "Equipment,equipment",
+				Item1:     "Equipment,admin/equipment",
 				Item2:     "Kunden,admin/clients",
 				Item3:     "Logout,logout",
 				Basket:    false,
@@ -75,7 +74,7 @@ func AdminItems(w http.ResponseWriter, r *http.Request) {
 		if session.Values["typ"].(string) == "Verleiher" {
 			p := menu{
 				Title:     "borgdir.media,index",
-				Item1:     "Equipment,equipment",
+				Item1:     "Equipment,admin/equipment",
 				Item2:     "Kunden,admin/clients",
 				Item3:     "Logout,logout",
 				Basket:    false,
@@ -106,13 +105,14 @@ func AdminAddItem(w http.ResponseWriter, r *http.Request) {
 		http.Redirect(w, r, "/login", 301)
 	} else {
 		if session.Values["typ"].(string) == "Verleiher" {
+			fmt.Println("TEST2")
 			if r.Method == "POST" {
 				bez := r.FormValue("bz")
 				kat := r.FormValue("kat")
-				invNumStr:= r.FormValue("invNum")
+				invNumStr := r.FormValue("invNum")
 				lgo := r.FormValue("lgo")
-				in:= r.FormValue("inhalt")
-				hin:= r.FormValue("hinweis")
+				in := r.FormValue("inhalt")
+				hin := r.FormValue("hinweis")
 				anzStr := r.FormValue("anz")
 
 				invNum, err := strconv.Atoi(invNumStr)
@@ -124,12 +124,36 @@ func AdminAddItem(w http.ResponseWriter, r *http.Request) {
 					return
 				}
 
-				model.CreateItem(bez, kat, invNum, lgo, anz, in, hin,)
+				//Handle Uploading Image
+				file, handler, err := r.FormFile("img")
+				if (handler.Filename != "") {
+					if err != nil {
+						return
+					}
+					defer file.Close()
+
+					src, err := handler.Open()
+					if err != nil {
+						return
+					}
+					defer src.Close()
+
+					dst, err := os.Create("./static/images/" + handler.Filename)
+					if err != nil {
+						return
+					}
+					defer dst.Close()
+
+					//Save Image in destination (static/images/"name")
+					io.Copy(dst, src)
+				}
+
+				model.CreateItem(bez, kat, invNum, lgo, anz, in, hin, handler.Filename)
 				http.Redirect(w, r, "/admin/equipment", 301)
 			} else {
 				p := menu{
 					Title:     "borgdir.media,index",
-					Item1:     "Equipment,equipment",
+					Item1:     "Equipment,admin/equipment",
 					Item2:     "Kunden,admin/clients",
 					Item3:     "Logout,logout",
 					Basket:    false,
@@ -161,7 +185,7 @@ func AdminUser(w http.ResponseWriter, r *http.Request) {
 		if session.Values["typ"].(string) == "Verleiher" {
 			p := menu{
 				Title:     "borgdir.media,index",
-				Item1:     "Equipment,equipment",
+				Item1:     "Equipment,admin/equipment",
 				Item2:     "Kunden,admin/clients",
 				Item3:     "Logout,logout",
 				Basket:    false,
@@ -219,10 +243,10 @@ func AdminChangeItem(w http.ResponseWriter, r *http.Request) {
 
 				bez := r.FormValue("bz")
 				kat := r.FormValue("kat")
-				invNumStr:= r.FormValue("invNum")
+				invNumStr := r.FormValue("invNum")
 				lgo := r.FormValue("lgo")
-				in:= r.FormValue("inhalt")
-				hin:= r.FormValue("hinweis")
+				in := r.FormValue("inhalt")
+				hin := r.FormValue("hinweis")
 				anzStr := r.FormValue("anz")
 
 				invNum, err := strconv.Atoi(invNumStr)
@@ -248,17 +272,17 @@ func AdminChangeItem(w http.ResponseWriter, r *http.Request) {
 					}
 					defer src.Close()
 
-					dst, err := os.Create("./static/images/"+handler.Filename)
+					dst, err := os.Create("./static/images/" + handler.Filename)
 					if err != nil {
 						return
 					}
 					defer dst.Close()
 
 					//Save Image in destination (static/images/"name")
-					io.Copy(dst,src)
+					io.Copy(dst, src)
 				}
-				model.UpdateItem(id,bez, kat, invNum, lgo, in, anz, hin, handler.Filename)
-				http.Redirect(w, r, "/admin/change/item/"+i, 301)
+				model.UpdateItem(id, bez, kat, invNum, lgo, in, anz, hin, handler.Filename)
+				http.Redirect(w, r, "/admin/equipment", 301)
 			} else {
 				i := r.URL.Path[len("/admin/change/item/"):]
 				id, err := strconv.Atoi(i)
@@ -271,7 +295,7 @@ func AdminChangeItem(w http.ResponseWriter, r *http.Request) {
 
 				p := menu{
 					Title:     "borgdir.media,index",
-					Item1:     "Equipment,equipment",
+					Item1:     "Equipment,admin/equipment",
 					Item2:     "Kunden,admin/clients",
 					Item3:     "Logout,logout",
 					Basket:    false,
@@ -327,20 +351,20 @@ func AdminEditUser(w http.ResponseWriter, r *http.Request) {
 					}
 					defer src.Close()
 
-					dst, err := os.Create("./static/images/"+handler.Filename)
+					dst, err := os.Create("./static/images/" + handler.Filename)
 					if err != nil {
 						return
 					}
 					defer dst.Close()
 
 					//Save Image in destination (static/images/"name")
-					io.Copy(dst,src)
+					io.Copy(dst, src)
 				}
 
-				model.UpdateProfile(id, user, mail, psw,handler.Filename)
+				model.UpdateProfile(id, user, mail, psw, handler.Filename)
 				session.Values["username"] = user
-				session.Save(r,w)
-				http.Redirect(w, r, "/admin/edit-client/"+i, 301)
+				session.Save(r, w)
+				http.Redirect(w, r, "/admin/clients", 301)
 			} else {
 				i := r.URL.Path[len("/admin/edit-client/"):]
 				id, err := strconv.Atoi(i)
@@ -351,7 +375,7 @@ func AdminEditUser(w http.ResponseWriter, r *http.Request) {
 
 				p := menu{
 					Title:     "borgdir.media,index",
-					Item1:     "Equipment,equipment",
+					Item1:     "Equipment,admin/equipment",
 					Item2:     "Kunden,admin/clients",
 					Item3:     "Logout,logout",
 					Basket:    false,
@@ -391,6 +415,39 @@ func AdminDeleteItem(w http.ResponseWriter, r *http.Request) {
 			return
 		}
 		model.DeleteItem(id)
-		http.Redirect(w, r, "/admin/equipment", 301)
+		http.Redirect(w, r, "/admin/equipment", http.StatusFound)
+	}
+}
+
+func LockProfile(w http.ResponseWriter, r *http.Request) {
+	session, _ := store.Get(r, "session")
+
+	if auth, ok := session.Values["authenticated"].(bool); !auth || !ok {
+		http.Redirect(w, r, "/login", 301)
+	} else {
+		i := r.URL.Path[len("/lock/profile/"):]
+
+		id, err := strconv.Atoi(i)
+		if err != nil {
+			return
+		}
+		model.LockProfile(id)
+		http.Redirect(w, r, "/admin/clients", 301)
+	}
+}
+func UnLockProfile(w http.ResponseWriter, r *http.Request) {
+	session, _ := store.Get(r, "session")
+
+	if auth, ok := session.Values["authenticated"].(bool); !auth || !ok {
+		http.Redirect(w, r, "/login", 301)
+	} else {
+		i := r.URL.Path[len("/unlock/profile/"):]
+
+		id, err := strconv.Atoi(i)
+		if err != nil {
+			return
+		}
+		model.UnLockProfile(id)
+		http.Redirect(w, r, "/admin/clients", 301)
 	}
 }

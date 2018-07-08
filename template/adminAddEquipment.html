@@ -1,9 +1,7 @@
 {{define "adminAddEquipment"}}
-
 <div class="container mt-3">
-
     <h4 class="">Equipment hinzufügen</h4>
-    <form class="form mt-4" role="form" onsubmit="return validateForm()" method="POST" enctype="multipart/form-data">
+    <form class="form mt-4" role="form" method="POST" enctype="multipart/form-data">
         <div class="row mt-2">
             <div class="col-8">
                 <div class="row">
@@ -18,9 +16,11 @@
                             <label for="kat">Kategorie</label>
                             <select class="form-control" name="kat" id="kat">
                                 <option>Alle</option>
-                                <option>Kameras</option>
-                                <option>Mikrofone</option>
-                                <option>Monitore</option>
+                                <option>Kamera</option>
+                                <option>Kommunikation</option>
+                                <option>Computer Zubehör</option>
+                                <option>Kabel</option>
+                                <option>Audiosysteme</option>
                             </select>
                         </div>
                     </div>
@@ -72,7 +72,8 @@
                     Profilbild
                 </div>
                 <div class="d-flex flex-column">
-                    <img class="img-fluid" name="bildurl" src="//placehold.it/300x200?text=Profilbild" alt="profilbild" style="height: 200px; width: 300px">
+                    <img class="img-fluid" name="bildurl" src="//placehold.it/300x200?text=Profilbild" alt="profilbild"
+                         style="height: 200px; width: 300px">
                 </div>
                 <div class="d-flex flex-column my-2 text-right">
                     <input style="width: 250px" type="file" name="img">

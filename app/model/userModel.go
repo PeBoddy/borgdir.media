@@ -122,14 +122,20 @@ func UpdateProfile(id int, user string, mail string, psw string, url string) (er
 
 // Lock the Profile
 func LockProfile(id int) (err error) {
-	_, err = config.Db.Exec("update User set Status = gesperrt where UserID = $1", id)
+	_, err = config.Db.Exec("update User set Status = 'gesperrt' where UserID = $1", id)
+	return
+}
+
+// Lock the Profile
+func UnLockProfile(id int) (err error) {
+	_, err = config.Db.Exec("update User set Status = 'aktiv' where UserID = $1", id)
 	return
 }
 
 // GetUserByUsername retrieve Session by username
 func GetUserByUsername(username string) (user SessionData, err error) {
 	user = SessionData{}
-	err = config.Db.QueryRow("select UserID, Name, Typ, Passwort from User where Name = $1", username).Scan(&user.ID, &user.Username, &user.Typ, &user.Password)
+	err = config.Db.QueryRow("select UserID, Name, Typ, Passwort, Status from User where Name = $1", username).Scan(&user.ID, &user.Username, &user.Typ, &user.Password, &user.Status)
 
 	return
 }

@@ -27,10 +27,13 @@ func main() {
 	r.HandleFunc("/register", controller.Register)
 	r.HandleFunc("/cart", controller.Cart)
 	r.HandleFunc("/add-to-cart/{id}", controller.AddToCart)
+	r.HandleFunc("/notice/{id}", controller.NoticeItem)
+	r.HandleFunc("/notice/off/{id}", controller.NoticeOff)
 	r.HandleFunc("/remove-from-cart/{id}", controller.RemoveFromCart)
 	r.HandleFunc("/profile/{id}", controller.Profile)
 	r.HandleFunc("/delete/profile/{id}", controller.DeleteProfile)
 	r.HandleFunc("/lock/profile/{id}", controller.LockProfile)
+	r.HandleFunc("/unlock/profile/{id}", controller.UnLockProfile)
 
 	fs := http.FileServer(http.Dir("./"))
 	http.Handle("/static/", fs)

@@ -7,12 +7,16 @@
         </div>
     </div>
     <div class="row mb-3">
-        <input class="form-control col-3 mr-2" id="input1" type="text" placeholder="Suche">
+        <form class="col-3" id="search-form" action="javascript: search();">
+            <input class="form-control" id="search-val" type="text" placeholder="Suche" onabort="document.getElementById('search-form').submit(); return false;">
+        </form>
         <select class="col-2 form-control selectBox">
             <option>Alle</option>
-            <option>1</option>
-            <option>2</option>
-            <option>3</option>
+            <option>Kamera</option>
+            <option>Kommunikation</option>
+            <option>Computer Zubehör</option>
+            <option>Kabel</option>
+            <option>Audiosysteme</option>
         </select>
     </div>
     <div class="row bottom-border cursiv-text bold-text my-3">
@@ -27,33 +31,33 @@
         </div>
     </div>
 {{range .Items}}
-    <div class="row equipment-row">
+    <div class="row equipment-row" id="client">
         <div class="col-3">
             <div class="row">
                 <div class="col-5">
                     <img class="img-fluid" style="width: 150px; height: 80px" src="/static/images/{{.BildUrl}}">
                 </div>
-                <div class="col-7">
-                    <div class="row">
-                        <p class="bold-medium-text">{{.Name}}</p>
+                <div class="col-7" id="{{.Name}}">
+                    <div class="row search-item">
+                        <p class="bold-text">{{.Name}}</p>
                     </div>
-                    <div class="row">
+                    <div class="row search-item">
                         <p class="small-text" name="kundenId">ID: {{.UserID}}</p>
                     </div>
-                    <div class="row">
+                    <div class="row search-item">
                         <p class="small-text red-text bold-text cursiv-text">{{.Typ}}</p>
                     </div>
                 </div>
             </div>
         </div>
-        <div class="col-4 text-spalte minimal-margin">
+        <div class="col-4 text-spalte search-item">
         {{range .Bezeichnungen}}
             <p>{{.Bezeichnung}}</p>
         {{end}}
         </div>
         <div class="col-2 offset-1">
-            <p class="minimal-margin ">Konto aktiv bis:</p>
-            <p class="minimal-margin red-text cursiv-text">{{.Status}}</p>
+            <p>Konto aktiv bis:</p>
+            <p class="red-text cursiv-text">{{.Status}}</p>
         </div>
         <div class="col-1 centered-text">
             <a href="/admin/edit-client/{{.UserID}}" class="btn btn-default bg-dark fa-button">
